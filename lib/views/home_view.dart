@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'pg_meals.dart';
+import 'package:pg_app_v1/models/pg_meals.dart';
 
 class HomeView extends StatelessWidget {
   final List<PgMeals> _mealList = [
