@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pg_app_v1/services/auth_service.dart';
 import 'package:pg_app_v1/views/home_view.dart';
 import 'package:pg_app_v1/views/widgets/provider_widge.dart';
-import 'pages.dart';
+import 'package:pg_app_v1/pages.dart';
 import 'package:pg_app_v1/views/user_input.dart';
-import 'models/pg_meals.dart';
+import 'package:pg_app_v1/models/pg_meals.dart';
 
   final bgColor = const Color(0xffe53935);//FF75A2EA);
 
@@ -50,6 +50,12 @@ class _HomeState extends State<Home> {
               }catch(e){
                 print(e);
               }
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () async {
+              Navigator.of(context).pushNamed('/convertUser');
             },
           ),
         ],

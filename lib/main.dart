@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pg_app_v1/services/auth_service.dart';
 import 'package:pg_app_v1/views/signup_view.dart';
-import 'home_page.dart';
+import 'views/navigation_view.dart';
 import 'views/first_view.dart';
 import 'views/widgets/provider_widge.dart';
 
@@ -20,9 +20,11 @@ class MyApp extends StatelessWidget {
           //home: Home()
           home: HomeController(),
           routes: <String, WidgetBuilder>{
+            '/home': (BuildContext context) => HomeController(),
             '/signUp': (BuildContext context) => SignUpView(authFormType: AuthFormType.signUp,),
             '/signIn': (BuildContext context) => SignUpView(authFormType: AuthFormType.signIn,),
-            '/home': (BuildContext context) => HomeController(),
+            '/anonymousSignIn': (BuildContext context) => SignUpView(authFormType: AuthFormType.anonymous,),
+            '/convertUser': (BuildContext context) => SignUpView(authFormType: AuthFormType.convert,),
           }),
     );
   }

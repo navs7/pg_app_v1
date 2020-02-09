@@ -58,7 +58,7 @@ class FirstView extends StatelessWidget {
                         primaryButtonText: "Create account",
                         primaryButtonRoute: "/signUp",
                         secondaryButtonText: "Maybe later",
-                        secondaryButtonRoute: "/home",
+                        secondaryButtonRoute: "/anonymousSignIn",
                       )
                     );
                   },
