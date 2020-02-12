@@ -22,8 +22,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final userInput = new PgMeals(null, null, null, null, null, null, null,
-        null, null, null, null, null, null, null);
+    final userInput = new PgMeals(null, null, null, null, null, null,);
     return Scaffold(
       appBar: AppBar(
         title: Text("PG app"),

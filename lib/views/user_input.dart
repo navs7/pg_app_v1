@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pg_app_v1/models/pg_meals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'widgets/provider_widge.dart';
 
 class UserInput extends StatefulWidget {
   final PgMeals pgMeals;
@@ -12,8 +13,7 @@ class UserInput extends StatefulWidget {
 }
 
 class _UserInputState extends State<UserInput> {
-  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null, null,
-        null, null, null, null, null, null, null);
+  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null);
   int _groupValue = -1;
   final db = Firestore.instance;
 
@@ -61,10 +61,16 @@ class _UserInputState extends State<UserInput> {
             RaisedButton(
               child: Text("Confirm"),
               onPressed: () async{
-                pgMeals.mealChoice1 = _groupValue.toString();
+                pgMeals.mealType = _groupValue.toString();
+                pgMeals.myDate = DateTime.now();
+                pgMeals.mealTime = "Breakfast";
+                pgMeals.isTakingMeal = true;
+                pgMeals.addonDoubleOmlet = _groupValue.toString();
+                pgMeals.addonSingleOmlet = _groupValue.toString();
                 print("");
                 //save data to firebase
-                await db.collection("pg_meal").add(pgMeals.toJSON());
+                final uid = await Provider.of(context).auth.getCurrentUID();
+                await db.collection("userData").document(uid).collection("pg_meal").add(pgMeals.toJSON());
                 //clear all pages and jump to first page
                 Navigator.of(context).popUntil((route)=>route.isFirst);
               },              
