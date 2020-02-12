@@ -80,6 +80,31 @@ class _UserInputState extends State<UserInput> {
       ),
     );
   }
+  
+  //save & retrieve DATE
+  public void storeDatetoFirebase() {
+    handler = new Handler();
+    runnable = new Runnable() {
+        @Override
+        public void run() {
+            handler.postDelayed(this, 1000);
+            try {
+                Date date = new Date();
+                Date newDate = new Date(date.getTime() + (604800000L * 2) + (24 * 60 * 60));
+                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                String stringdate = dt.format(newDate);
+
+                System.out.println("Submission Date: " + stringdate);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("My_Date");
+                databaseReference.child("init_date").setValue(stringdate);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+    handler.postDelayed(runnable, 1 * 1000);
+}
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
     return RadioListTile(
