@@ -104,6 +104,21 @@ class _UserInputState extends State<UserInput> {
         }
     };
     handler.postDelayed(runnable, 1 * 1000);
+    //not in this function
+    double _timeOfDayToDouble(TimeOfDay tod) => tod.hour + tod.minute/60.0;
+    var now = _timeOfDayToDouble(TimeOfDay.now());
+    var startTime = _timeOfDayToDouble(_startTime);  // _startTime is a TimeOfDay
+    var stopTime = _timeOfDayToDouble(_stopTime);    // _stopTime is a TimeOfDay
+    if (now > startTime && now < stopTime) {
+    // do your work here ...
+    }
+    //not in this function
+    var now = DateTime.now();
+    var berlinWallFell = DateTime.utc(1989, 11, 9);
+    var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
+    berlinWallFell.compareTo(berlinWallFell); // => 0 (equal)
+    moonLanding.compareTo(berlinWallFell); // => -1 (not equal)
+
 }
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
