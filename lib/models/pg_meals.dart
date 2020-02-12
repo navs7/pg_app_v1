@@ -1,5 +1,5 @@
 class PgMeals{
-  DateTime myDate;
+  String myDate;
   String mealTime;
   bool isTakingMeal;//will have or not
   String mealType;//veg or non-veg
@@ -9,7 +9,7 @@ class PgMeals{
   PgMeals(this.myDate, this.mealTime, this.mealType, this.isTakingMeal, this.addonSingleOmlet, this.addonDoubleOmlet);
 
   Map<String, dynamic> toJSON() => {
-    'date': myDate,
+    'myDate': myDate,
     'mealTime': mealTime,
     'isTakingMeal': isTakingMeal,
     'mealType': mealType,

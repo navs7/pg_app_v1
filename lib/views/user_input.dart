@@ -15,10 +15,11 @@ class UserInput extends StatefulWidget {
 class _UserInputState extends State<UserInput> {
   final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null);
   int _groupValue = -1;
+  String _radioValue;
   final db = Firestore.instance;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       appBar: AppBar(
         title: Text("Meal input"),
@@ -51,7 +52,12 @@ class _UserInputState extends State<UserInput> {
             _myRadioButton(
               title: "Single Omlet",
               value: 2,
-              onChanged: (newValue) => setState(() => _groupValue = newValue),
+              onChanged: (newValue){
+                setState(() {
+                  _groupValue = newValue;
+                  _radioValue = "Single Omlet";                  
+                });
+              }// => setState(() => _groupValue = newValue),
             ),
             _myRadioButton(
               title: "Double Omlet",
@@ -61,13 +67,26 @@ class _UserInputState extends State<UserInput> {
             RaisedButton(
               child: Text("Confirm"),
               onPressed: () async{
-                pgMeals.mealType = _groupValue.toString();
-                pgMeals.myDate = DateTime.now();
+                // var now = new DateTime.now().hour;
+                // print(now);
+                // var dinnerTime = 19;
+                // if(now < dinnerTime){
+                //   print("ok to change");
+                // }
+                // else{
+                //   print("can't change");
+                // }
+                var now = new DateTime.now();
+                var myDate = new DateFormat("dd-MM-yyyy hh:mm:ss").format(now); // => 21-04-2019 02:40:25
+                print(myDate);
+
+                pgMeals.myDate = myDate;
                 pgMeals.mealTime = "Breakfast";
                 pgMeals.isTakingMeal = true;
+                pgMeals.mealType = "Non-veg";
+                pgMeals.addonSingleOmlet = _radioValue.toString();
                 pgMeals.addonDoubleOmlet = _groupValue.toString();
-                pgMeals.addonSingleOmlet = _groupValue.toString();
-                print("");
+                
                 //save data to firebase
                 final uid = await Provider.of(context).auth.getCurrentUID();
                 await db.collection("userData").document(uid).collection("pg_meal").add(pgMeals.toJSON());
@@ -81,45 +100,45 @@ class _UserInputState extends State<UserInput> {
     );
   }
   
-  //save & retrieve DATE
-  public void storeDatetoFirebase() {
-    handler = new Handler();
-    runnable = new Runnable() {
-        @Override
-        public void run() {
-            handler.postDelayed(this, 1000);
-            try {
-                Date date = new Date();
-                Date newDate = new Date(date.getTime() + (604800000L * 2) + (24 * 60 * 60));
-                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-                String stringdate = dt.format(newDate);
+//   //save & retrieve DATE
+//   public void storeDatetoFirebase() {
+//     handler = new Handler();
+//     runnable = new Runnable() {
+//         @Override
+//         public void run() {
+//             handler.postDelayed(this, 1000);
+//             try {
+//                 Date date = new Date();
+//                 Date newDate = new Date(date.getTime() + (604800000L * 2) + (24 * 60 * 60));
+//                 SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+//                 String stringdate = dt.format(newDate);
 
-                System.out.println("Submission Date: " + stringdate);
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("My_Date");
-                databaseReference.child("init_date").setValue(stringdate);
+//                 System.out.println("Submission Date: " + stringdate);
+//                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("My_Date");
+//                 databaseReference.child("init_date").setValue(stringdate);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-    handler.postDelayed(runnable, 1 * 1000);
-    //not in this function
-    double _timeOfDayToDouble(TimeOfDay tod) => tod.hour + tod.minute/60.0;
-    var now = _timeOfDayToDouble(TimeOfDay.now());
-    var startTime = _timeOfDayToDouble(_startTime);  // _startTime is a TimeOfDay
-    var stopTime = _timeOfDayToDouble(_stopTime);    // _stopTime is a TimeOfDay
-    if (now > startTime && now < stopTime) {
-    // do your work here ...
-    }
-    //not in this function
-    var now = DateTime.now();
-    var berlinWallFell = DateTime.utc(1989, 11, 9);
-    var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
-    berlinWallFell.compareTo(berlinWallFell); // => 0 (equal)
-    moonLanding.compareTo(berlinWallFell); // => -1 (not equal)
+//             } catch (Exception e) {
+//                 e.printStackTrace();
+//             }
+//         }
+//     };
+//     handler.postDelayed(runnable, 1 * 1000);
+//     //not in this function
+//     double _timeOfDayToDouble(TimeOfDay tod) => tod.hour + tod.minute/60.0;
+//     var now = _timeOfDayToDouble(TimeOfDay.now());
+//     var startTime = _timeOfDayToDouble(_startTime);  // _startTime is a TimeOfDay
+//     var stopTime = _timeOfDayToDouble(_stopTime);    // _stopTime is a TimeOfDay
+//     if (now > startTime && now < stopTime) {
+//     // do your work here ...
+//     }
+//     //not in this function
+//     var now = DateTime.now();
+//     var berlinWallFell = DateTime.utc(1989, 11, 9);
+//     var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
+//     berlinWallFell.compareTo(berlinWallFell); // => 0 (equal)
+//     moonLanding.compareTo(berlinWallFell); // => -1 (not equal)
 
-}
+// }
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
     return RadioListTile(

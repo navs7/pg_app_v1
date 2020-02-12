@@ -36,6 +36,7 @@ class HomeView extends StatelessWidget {
 
   Widget buildDateCard(BuildContext context, DocumentSnapshot pgMeal) {
     //final meals = _mealList[index];
+    print(pgMeal['myDate']);
     return Container(
       child: Card(
         child: Padding(
@@ -46,24 +47,18 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.only(top:8.0, bottom: 8.0),
                 child: Row(
                   children: <Widget>[
-                    // Text(
-                    //     //DateFormat("dd-MM-yyyy").format(meals.myDate).toString(),
-                    //     DateFormat("dd-MM-yyyy").format(pgMeal['myDate'].toDate()).toString(),
-                    //     style: TextStyle(fontSize: 20.0),),
-                        Spacer(),
-                        //Text(meals.mealTime, style: TextStyle(fontSize: 20.0),),
-                        Text(pgMeal['mealTime'], style: TextStyle(fontSize: 20.0),),
+                    Text(pgMeal['myDate'].toString(), style: TextStyle(fontSize: 20.0),),
+                    Spacer(),
+                        Text(pgMeal['mealTime'].toString(), style: TextStyle(fontSize: 20.0),),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:8.0, bottom: 2.0),
                 child: Row(
-                  children: <Widget>[
-                    //Text(meals.mealChoice1),
-                    //Text(pgMeal['isTakingMeal']),
-                    Spacer(),
-                    //Text(meals.totalCount1.toString()),
+                  children: <Widget>[                                        
+                    Text(pgMeal['isTakingMeal'].toString()),
+                    Spacer(),                    
                     Text(pgMeal['mealType']),                    
                   ],
                 ),
@@ -72,9 +67,8 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.only(top:2.0, bottom: 8.0),
                 child: Row(
                   children: <Widget>[
-                    //Text(meals.userNames1),
                     Text(pgMeal['addonSingleOmlet']),
-                    Text(pgMeal['addonDoubleOmlet']),
+                    Text(pgMeal['addonDoubleOmlet'].toString()),
                   ],
                 ),
               ),
