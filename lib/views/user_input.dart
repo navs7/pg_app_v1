@@ -13,13 +13,16 @@ class UserInput extends StatefulWidget {
 }
 
 class _UserInputState extends State<UserInput> {
-  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null);
+  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null, null, null);
   int _groupValue = -1;
   String _radioValue;
+  int _order = -1;  
   final db = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {    
+    final _mealTime = _mealTimeDisplay().first;
+    final _mealDate = _mealTimeDisplay().last;
     return Scaffold(
       appBar: AppBar(
         title: Text("Meal input"),
@@ -30,14 +33,13 @@ class _UserInputState extends State<UserInput> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                DateFormat("dd-MM-yyyy").format(DateTime.now()).toString(),
+              child: Text(_mealDate,
                 style: TextStyle(fontSize: 20.0),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text("Breakfast"),//**************?Logic to fetch from daytime?**************** */
+              child: Text(_mealTime),
             ),
             _myRadioButton(
               title: "Not have",
@@ -67,21 +69,15 @@ class _UserInputState extends State<UserInput> {
             RaisedButton(
               child: Text("Confirm"),
               onPressed: () async{
-                // var now = new DateTime.now().hour;
-                // print(now);
-                // var dinnerTime = 19;
-                // if(now < dinnerTime){
-                //   print("ok to change");
-                // }
-                // else{
-                //   print("can't change");
-                // }
                 var now = new DateTime.now();
-                var myDate = new DateFormat("dd-MM-yyyy hh:mm:ss").format(now); // => 21-04-2019 02:40:25
-                print(myDate);
+                //var myDate = new DateFormat("dd-MM-yyyy").format(now); // => 21-04-2019 02:40:25
+                var myTime = new DateFormat("hh:mm:ss").format(now);
+                _order = _order - 1;
 
-                pgMeals.myDate = myDate;
-                pgMeals.mealTime = "Breakfast";
+                pgMeals.order = _order;
+                pgMeals.myDate = _mealDate;
+                pgMeals.myTime = myTime;
+                pgMeals.mealTime = _mealTime;
                 pgMeals.isTakingMeal = true;
                 pgMeals.mealType = "Non-veg";
                 pgMeals.addonSingleOmlet = _radioValue.toString();
@@ -90,6 +86,7 @@ class _UserInputState extends State<UserInput> {
                 //save data to firebase
                 final uid = await Provider.of(context).auth.getCurrentUID();
                 await db.collection("userData").document(uid).collection("pg_meal").add(pgMeals.toJSON());
+                //db.collection("userData").document(uid).collection("pg_meal").orderBy(myDate);
                 //clear all pages and jump to first page
                 Navigator.of(context).popUntil((route)=>route.isFirst);
               },              
@@ -99,46 +96,32 @@ class _UserInputState extends State<UserInput> {
       ),
     );
   }
-  
-//   //save & retrieve DATE
-//   public void storeDatetoFirebase() {
-//     handler = new Handler();
-//     runnable = new Runnable() {
-//         @Override
-//         public void run() {
-//             handler.postDelayed(this, 1000);
-//             try {
-//                 Date date = new Date();
-//                 Date newDate = new Date(date.getTime() + (604800000L * 2) + (24 * 60 * 60));
-//                 SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-//                 String stringdate = dt.format(newDate);
+  //Mealtime logic
+  List _mealTimeDisplay(){
+    var listOut = new List();
+    //listOut.removeRange(0, 1);
 
-//                 System.out.println("Submission Date: " + stringdate);
-//                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("My_Date");
-//                 databaseReference.child("init_date").setValue(stringdate);
-
-//             } catch (Exception e) {
-//                 e.printStackTrace();
-//             }
-//         }
-//     };
-//     handler.postDelayed(runnable, 1 * 1000);
-//     //not in this function
-//     double _timeOfDayToDouble(TimeOfDay tod) => tod.hour + tod.minute/60.0;
-//     var now = _timeOfDayToDouble(TimeOfDay.now());
-//     var startTime = _timeOfDayToDouble(_startTime);  // _startTime is a TimeOfDay
-//     var stopTime = _timeOfDayToDouble(_stopTime);    // _stopTime is a TimeOfDay
-//     if (now > startTime && now < stopTime) {
-//     // do your work here ...
-//     }
-//     //not in this function
-//     var now = DateTime.now();
-//     var berlinWallFell = DateTime.utc(1989, 11, 9);
-//     var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");
-//     berlinWallFell.compareTo(berlinWallFell); // => 0 (equal)
-//     moonLanding.compareTo(berlinWallFell); // => -1 (not equal)
-
-// }
+    var now = new DateTime.now().hour;
+    var date = new DateTime.now();
+    if(now >= 9 && now <=12){
+      listOut.add("Lunch");
+      listOut.add(DateFormat("dd-MM-yyyy").format(DateTime.now()).toString());
+    }
+    else if(now >=12 && now <=19){
+      listOut.add("Dinner");
+      listOut.add(DateFormat("dd-MM-yyyy").format(DateTime.now()).toString());      
+    }
+    else if(now >=19 && now <=24){
+      listOut.add("Breakfast");
+      var newDate = new DateTime(date.year, date.month, date.day+1);
+      listOut.add(DateFormat("dd-MM-yyyy").format(newDate).toString());
+    }
+    else if(now >= 0 && now <=7){
+      listOut.add("Breakfast");
+      listOut.add(DateFormat("dd-MM-yyyy").format(DateTime.now()).toString()); 
+    }
+    return listOut;
+  }
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
     return RadioListTile(

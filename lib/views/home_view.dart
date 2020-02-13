@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:pg_app_v1/models/pg_meals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/provider_widge.dart';
 
@@ -31,12 +29,10 @@ class HomeView extends StatelessWidget {
 
   Stream<QuerySnapshot> getUsersMealStreamSnapshot(BuildContext context)async*{
     final uid = await Provider.of(context).auth.getCurrentUID();
-    yield* Firestore.instance.collection('userData').document(uid).collection('pg_meal').snapshots();
+    yield* Firestore.instance.collection('userData').document(uid).collection('pg_meal').orderBy('order').snapshots();
   }
 
   Widget buildDateCard(BuildContext context, DocumentSnapshot pgMeal) {
-    //final meals = _mealList[index];
-    print(pgMeal['myDate']);
     return Container(
       child: Card(
         child: Padding(
