@@ -13,10 +13,9 @@ class UserInput extends StatefulWidget {
 }
 
 class _UserInputState extends State<UserInput> {
-  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null, null, null);
+  final PgMeals pgMeals = new PgMeals(null, null, null, null, null, null, null);
   int _groupValue = -1;
   String _radioValue;
-  int _order = -1;  
   final db = Firestore.instance;
 
   @override
@@ -72,9 +71,7 @@ class _UserInputState extends State<UserInput> {
                 var now = new DateTime.now();
                 //var myDate = new DateFormat("dd-MM-yyyy").format(now); // => 21-04-2019 02:40:25
                 var myTime = new DateFormat("hh:mm:ss").format(now);
-                _order = _order - 1;
 
-                pgMeals.order = _order;
                 pgMeals.myDate = _mealDate;
                 pgMeals.myTime = myTime;
                 pgMeals.mealTime = _mealTime;

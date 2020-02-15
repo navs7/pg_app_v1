@@ -29,7 +29,7 @@ class HomeView extends StatelessWidget {
 
   Stream<QuerySnapshot> getUsersMealStreamSnapshot(BuildContext context)async*{
     final uid = await Provider.of(context).auth.getCurrentUID();
-    yield* Firestore.instance.collection('userData').document(uid).collection('pg_meal').orderBy('order').snapshots();
+    yield* Firestore.instance.collection('userData').document(uid).collection('pg_meal').orderBy('myTime', descending:true).snapshots();
   }
 
   Widget buildDateCard(BuildContext context, DocumentSnapshot pgMeal) {

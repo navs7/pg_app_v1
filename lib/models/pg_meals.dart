@@ -1,5 +1,4 @@
 class PgMeals{
-  int order;
   String myDate;
   String myTime;
   String mealTime;
@@ -8,10 +7,9 @@ class PgMeals{
   String addonSingleOmlet;
   String addonDoubleOmlet;
 
-  PgMeals(this.order, this.myDate, this.myTime, this.mealTime, this.mealType, this.isTakingMeal, this.addonSingleOmlet, this.addonDoubleOmlet);
+  PgMeals(this.myDate, this.myTime, this.mealTime, this.mealType, this.isTakingMeal, this.addonSingleOmlet, this.addonDoubleOmlet);
 
   Map<String, dynamic> toJSON() => {
-    'order': order,
     'myDate': myDate,
     'myTime': myTime,
     'mealTime': mealTime,
